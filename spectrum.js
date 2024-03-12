@@ -293,10 +293,18 @@
                 boundElement.after(container).hide();
             }
             else {
+                var appendTo;
 
-                var appendTo = opts.appendTo === "parent" ? boundElement.parent() : $(opts.appendTo);
-                if (appendTo.length !== 1) {
-                    appendTo = $("body");
+                if (opts.appendTo === "parent") {
+                    appendTo = boundElement.parent();
+                } else if (opts.appendTo === "replacer") {
+                    appendTo = replacer;
+                } else {
+                    appendTo = $(opts.appendTo);
+
+                    if (appendTo.length !== 1) {
+                        appendTo = $("body");
+                    }
                 }
 
                 appendTo.append(container);
@@ -1002,11 +1010,11 @@
         offsetTop += inputHeight;
 
         offsetLeft -=
-            Math.min(offsetLeft, (offsetLeft + dpWidth > viewWidth && viewWidth > dpWidth) ?
+            Math.min(offsetLeft, (offsetLeft + dpWidth > viewWidth) ?
             Math.abs(offsetLeft + dpWidth - viewWidth) : 0);
 
         offsetTop -=
-            Math.min(offsetTop, ((offsetTop + dpHeight > viewHeight && viewHeight > dpHeight) ?
+            Math.min(offsetTop, ((offsetTop + dpHeight > viewHeight) ?
             Math.abs(dpHeight + inputHeight - extraY) : extraY));
 
         return {
