@@ -892,6 +892,10 @@
                 displayColor = color.toString(currentPreferredFormat);
                 // Update the selection palette with the current color
                 addColorToSelectionPalette(color);
+
+                if (opts.showPalette) {
+                    drawPalette();
+                }
             }
 
             if (isInput) {
