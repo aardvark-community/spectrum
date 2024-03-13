@@ -613,6 +613,7 @@
 
         function toggle() {
             if (visible) {
+                revert();
                 hide();
             }
             else {
