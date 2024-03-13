@@ -34,6 +34,7 @@
         allowEmpty: false,
         showButtons: true,
         clickoutFiresChange: true,
+        fireChangeImmediately: false,
         showInitial: false,
         showPalette: false,
         showPaletteOnly: false,
@@ -471,13 +472,10 @@
                     set($(e.target).closest(".sp-thumb-el").data("color"));
                     move();
 
-                    // If the picker is going to close immediately, a palette selection
-                    // is a change.  Otherwise, it's a move only.
+                    updateOriginalInput(opts.hideAfterPaletteSelect || opts.fireChangeImmediately);
+
                     if (opts.hideAfterPaletteSelect) {
-                        updateOriginalInput(true);
                         hide();
-                    } else {
-                        updateOriginalInput();
                     }
                 }
 
@@ -585,6 +583,10 @@
             isDragging = false;
             container.removeClass(draggingClass);
             boundElement.trigger('dragstop.spectrum', [ get() ]);
+
+            if (opts.fireChangeImmediately && !opts.showButtons) {
+                updateOriginalInput(true);
+            }
         }
 
         function setFromTextInput() {
@@ -666,12 +668,19 @@
             // on click.
             if (isDragging) { return; }
 
-            if (clickoutFiresChange) {
-                updateOriginalInput(true);
+            if (!visible) { return; }
+
+            if (flat) { return; }
+
+            if (!opts.fireChangeImmediately || opts.showButtons) {
+                if (clickoutFiresChange) {
+                    updateOriginalInput(true);
+                }
+                else {
+                    revert();
+                }
             }
-            else {
-                revert();
-            }
+
             hide();
         }
 
@@ -877,6 +886,9 @@
                 hasChanged = !tinycolor.equals(color, colorOnShow);
 
             if (color) {
+                if (opts.fireChangeImmediately) {
+                    colorOnShow = color;
+                }
                 displayColor = color.toString(currentPreferredFormat);
                 // Update the selection palette with the current color
                 addColorToSelectionPalette(color);

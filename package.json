@@ -22,7 +22,8 @@
         "url": "http://briangrinstead.com/"
     },
     "scripts": {
-        "build": "grunt build"
+        "build": "grunt build",
+        "test": "grunt test"
     },
     "devDependencies": {
         "grunt-cli": "^1.4.3",
